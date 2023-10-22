@@ -1,0 +1,4 @@
+
+
+class NotCorrectImage(Exception):
+    pass
