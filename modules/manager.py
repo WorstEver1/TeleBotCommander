@@ -1,4 +1,5 @@
 from .channel import Channel
+from loguru import logger
 
 class ChannelManager:
 
@@ -7,9 +8,13 @@ class ChannelManager:
 
     async def run_all(self):
         for channel in self.channel_list:
-            await channel.run()
+            try:
+                image_name = await channel.run()
+                logger.info(f"Успешно отправлено изображение в канал {channel.channel_id}")
+            except Exception as e:
+                logger.error(f"Произошла ошибка при отправке изображения в канал {channel.channel_id}: {e}")
 
 
     def __convert_to_list_objects(self, channel_list):
-        return [Channel(channel[0], channel[1], channel[2], channel[3]) for channel in channel_list]
+        return [Channel(*channel) for channel in channel_list]
     
