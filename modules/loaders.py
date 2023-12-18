@@ -3,46 +3,27 @@ from .exceptions import NotCorrectDataFormat
 
 class BaseDataLoader:
     """
-    Base loader for list of lists with data
+    Base loader for a list of dictionaries containing data
     """
+    required_args = ['channel_id', 'bot_token', 'file_directory']
+    not_required_args = ['file_caption', 'data_type']
+
 
     def load_data(self, list_channels:list) -> None:
         """
-        If data is correct - store it in self.data
+        Stores data in self.data if the data is correct
         """
+        self.data = self.check_data(list_channels)
 
-        if self.check_data(list_channels):
-            self.data = list_channels
-
-    def check_data(self, list_channels:list) -> bool:
+    def check_data(self, list_channels:list) -> list:
         """
-        If type of data and number of arguments are correct return true
+        Returns the data if it is correct
         """
-
-        self.check_is_list(list_channels)
-        for i, channel in enumerate(list_channels):
-            self.check_length(channel, i)
-        return True
-    
-    def check_is_list(self, data: list, index:int=None) -> None:
-        """
-        Checks if data is list
-        """
-
-        if not isinstance(data, list):
-            message = 'Data is not a list'
-            if index is not None:
-                message = f'Item number {index+1} is not a list: {data}'
-            raise NotCorrectDataFormat(message)
-
-    def check_length(self, channel:list, index:int) -> None:
-        """
-        Checks if the list has 3 or 4 elements
-        """
-
-        length = len(channel)
-        if length < 3 or length > 4:
-            raise NotCorrectDataFormat(f'Incorrect number of arguments in list number {index+1}: {channel}. Expected 3 or 4, got {length}.')
+        for data_dict in list_channels:
+            for key in data_dict:
+                if key in self.required_args and not data_dict[key] or key not in self.required_args + self.not_required_args:
+                    raise NotCorrectDataFormat
+        return list_channels
         
 class JsonDataLoader(BaseDataLoader):
     """
@@ -57,22 +38,10 @@ class JsonDataLoader(BaseDataLoader):
         try:
             with open(path_to_json, 'r') as json_data:
                 data = json.load(json_data)
-                if self.check_data(data):
-                    self.data = data
+                self.data = self.check_data(data)
 
         except FileNotFoundError:
             raise FileNotFoundError('File not found')
         
         except json.JSONDecodeError:
             raise json.JSONDecodeError('Error decoding JSON')
-        
-    def check_data(self, list_channels:list) -> bool:
-        """
-        Checks if the data has the correct structure
-        """
-
-        self.check_is_list(list_channels)
-        for i, channel in enumerate(list_channels):
-            self.check_is_list(channel, i)
-            self.check_length(channel, i)
-        return True

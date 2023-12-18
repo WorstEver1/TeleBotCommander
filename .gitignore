@@ -3,4 +3,5 @@ test_run.py
 venv
 **/__pycache__/
 test_images
+test_gifs
 test.json

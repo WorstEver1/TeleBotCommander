@@ -18,5 +18,5 @@ class ChannelManager:
 
 
     def __convert_to_list_objects(self, channel_list):
-        return [Channel(*channel) for channel in channel_list]
+        return [Channel(**channel) for channel in channel_list]
     
