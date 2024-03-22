@@ -6,7 +6,7 @@ class BaseDataLoader:
     Base loader for a list of dictionaries containing data
     """
     required_args = ['channel_id', 'bot_token', 'file_directory']
-    not_required_args = ['file_caption', 'data_type']
+    not_required_args = ['file_caption', 'file_type']
 
 
     def load_data(self, list_channels:list) -> None:

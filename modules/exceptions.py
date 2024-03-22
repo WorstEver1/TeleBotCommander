@@ -1,4 +1,3 @@
-
 class NotCorrectImage(Exception):
     """
     Raise when image is bad
@@ -13,5 +12,14 @@ class NotCorrectDataFormat(Exception):
     Raise when data format is incorrect
     """
     def __init__(self, message="Data format is incorrect"):
+        self.message = message
+        super().__init__(self.message)
+
+class NotCorrectVideo(Exception):
+    """
+    Raise when image is bad
+    """
+
+    def __init__(self, message="Video is not correct"):
         self.message = message
         super().__init__(self.message)

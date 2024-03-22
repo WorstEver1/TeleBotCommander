@@ -11,10 +11,10 @@ class ChannelManager:
     async def run_all(self):
         for channel in self.channel_list:
             try:
-                await channel.run()
-                logger.info(f"Успешно отправлено изображение в канал {channel.channel_id}")
+                await channel.send_file()
+                logger.info(f"Успешно отправлен файл в канал {channel.channel_id}")
             except Exception as e:
-                logger.error(f"Произошла ошибка при отправке изображения в канал {channel.channel_id}: {e}")
+                logger.error(f"Произошла ошибка при отправке файла в канал {channel.channel_id} {e}")
 
 
     def __convert_to_list_objects(self, channel_list):
